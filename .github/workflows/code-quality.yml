@@ -29,11 +29,17 @@ jobs:
 
     - name: Install dependencies (Backend)
       working-directory: ./backend
-      run: npm ci
+      run: |
+        npm ci
+        npm install --save-dev jest
 
     - name: Run ESLint
       working-directory: ./backend
       run: npm run lint
+
+    - name: Run Jest tests with coverage
+      working-directory: ./backend
+      run: npx jest --coverage
 
     - name: Install dependencies (Mobile)
       working-directory: ./mobile
@@ -52,7 +58,7 @@ jobs:
       run: flutter test --coverage
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: ./mobile/coverage/lcov.info,./backend/coverage/lcov.info

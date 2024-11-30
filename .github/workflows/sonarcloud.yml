@@ -20,12 +20,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16.x'
+          cache: 'npm'
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.x'
           channel: 'stable'
+          cache: true
 
       - name: Install dependencies (Backend)
         working-directory: ./backend
@@ -33,7 +35,9 @@ jobs:
 
       - name: Run backend tests with coverage
         working-directory: ./backend
-        run: npm run test:coverage
+        run: |
+          npm install --save-dev jest
+          npx jest --coverage
 
       - name: Install dependencies (Mobile)
         working-directory: ./mobile
@@ -47,7 +51,7 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: a3938e4334515ea79f0e9112c347d0116f2a48f2
         with:
           args: >
             -Dsonar.organization=axelmedjber
@@ -57,3 +61,11 @@ jobs:
             -Dsonar.javascript.lcov.reportPaths=backend/coverage/lcov.info
             -Dsonar.flutter.coverage.reportPath=mobile/coverage/lcov.info
             -Dsonar.sourceEncoding=UTF-8
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: 8f3659f5-9c03-4839-a840-d98c35287ba2
+          files: ./backend/coverage/lcov.info,./mobile/coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
