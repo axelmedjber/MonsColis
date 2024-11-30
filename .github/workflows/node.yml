@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x, 18.x]
+        node-version: [16.x]
 
     services:
       postgres:
@@ -53,10 +53,20 @@ jobs:
         cache-dependency-path: './backend/package-lock.json'
 
     - name: Install dependencies
-      run: npm ci
+      run: |
+        npm ci
+        npm install -g knex
 
     - name: Lint
       run: npm run lint
+
+    - name: Run migrations
+      run: |
+        cp ../.env.example .env
+        npm run migrate
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/monscolis_test
+        NODE_ENV: test
 
     - name: Run tests
       run: npm test

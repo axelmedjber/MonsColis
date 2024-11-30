@@ -45,32 +45,50 @@ jobs:
         cache: 'npm'
         cache-dependency-path: './backend/package-lock.json'
 
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '3.x'
-        channel: 'stable'
-        cache: true
-
-    - name: Start Backend
+    - name: Install backend dependencies
       working-directory: ./backend
       run: |
         npm ci
-        npm run build
-        npm run start:test &
+        npm install -g knex
+
+    - name: Setup backend environment
+      working-directory: ./backend
+      run: |
+        cp .env.example .env
+        npm run migrate
       env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/monscolis_test
+        NODE_ENV: test
+
+    - name: Start backend server
+      working-directory: ./backend
+      run: |
+        npm start &
+        sleep 10
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/monscolis_test
         NODE_ENV: test
         PORT: 3000
-        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/monscolis_test
         REDIS_URL: redis://localhost:6379
-        JWT_SECRET: test_secret
-        SMS_API_KEY: test_key
 
-    - name: Run Integration Tests
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.13.x'
+        channel: 'stable'
+        cache: true
+
+    - name: Install mobile dependencies
       working-directory: ./mobile
       run: |
         flutter pub get
-        flutter test integration_test/app_test.dart
+        flutter config --no-analytics
+
+    - name: Run E2E tests
+      working-directory: ./mobile
+      run: flutter test integration_test
+      env:
+        API_BASE_URL: http://localhost:3000
 
     - name: Upload Test Results
       if: always()

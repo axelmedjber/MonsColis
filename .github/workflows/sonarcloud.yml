@@ -51,13 +51,13 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: a3938e4334515ea79f0e9112c347d0116f2a48f2
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
             -Dsonar.organization=axelmedjber
             -Dsonar.projectKey=axelmedjber_MonsColis
             -Dsonar.sources=backend/src,mobile/lib
-            -Dsonar.tests=backend/test,mobile/test
+            -Dsonar.tests=backend/__tests__,mobile/test
             -Dsonar.javascript.lcov.reportPaths=backend/coverage/lcov.info
             -Dsonar.flutter.coverage.reportPath=mobile/coverage/lcov.info
             -Dsonar.sourceEncoding=UTF-8
