@@ -13,23 +13,19 @@ const options = {
       },
       contact: {
         name: 'MonsColis Support',
-        url: 'https://github.com/yourusername/monscolis',
+        url: 'https://github.com/axelmedjber/MonsColis',
         email: 'support@monscolis.com',
       },
     },
     servers: [
       {
-        url: 'http://localhost:3000',
-        description: 'Development server',
-      },
-      {
-        url: 'https://api-staging.monscolis.com',
-        description: 'Staging server',
-      },
-      {
-        url: 'https://api.monscolis.com',
+        url: 'https://monscolis-backend.onrender.com',
         description: 'Production server',
       },
+      {
+        url: 'http://localhost:3000',
+        description: 'Development server',
+      }
     ],
     components: {
       securitySchemes: {
