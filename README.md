@@ -1,125 +1,104 @@
-# MonsColis 
+# MonsColis - Social Grocery Management System
 
-![CI/CD](https://github.com/axelmedjber/MonsColis/workflows/Flutter%20CI%2FCD/badge.svg)
-![CI/CD](https://github.com/axelmedjber/MonsColis/workflows/Node.js%20CI%2FCD/badge.svg)
-![Deploy](https://github.com/axelmedjber/MonsColis/workflows/Deploy/badge.svg)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+MonsColis is a modern social grocery management system that helps users manage their grocery shopping and share lists with friends and family.
 
-## About MonsColis
+## Project Structure
 
-MonsColis is a comprehensive mobile application designed to streamline social grocery services in Mons, Belgium. The platform connects beneficiaries with local social grocery stores through an efficient, user-friendly interface.
+```
+monscolis/
+├── .github/            # GitHub Actions workflows
+├── backend/           # Node.js backend server
+│   ├── src/
+│   │   ├── config/    # Configuration files
+│   │   ├── controllers/# Route controllers
+│   │   ├── middleware/# Express middleware
+│   │   ├── models/    # Database models
+│   │   ├── routes/    # API routes
+│   │   ├── services/  # Business logic
+│   │   └── utils/     # Utility functions
+│   ├── __tests__/     # Test files
+│   └── migrations/    # Database migrations
+├── mobile/           # Flutter mobile app
+└── assets/          # Shared assets
+```
 
-### Key Features
-
-- Cross-platform mobile application (iOS & Android)
-- Secure authentication with phone verification
-- Real-time store capacity tracking
-- Smart appointment scheduling
-- Digital document management
-- Multi-language support (FR, EN, NL)
-- Dark mode support
-- Push notifications
-
-## Getting Started
+## Backend Setup
 
 ### Prerequisites
 
-- Flutter SDK (latest stable version)
-- Node.js (v16.x or later)
-- PostgreSQL (v13 or later)
-- Redis
-- Git
+- Node.js >= 18.0.0
+- PostgreSQL >= 13
+- Redis >= 6
+- MinIO (for file storage)
 
 ### Installation
 
-1. Clone the repository
-```bash
-git clone https://github.com/axelmedjber/MonsColis.git
-cd MonsColis
-```
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/monscolis.git
+   cd monscolis
+   ```
 
-2. Set up the development environment
-```powershell
-.\scripts\setup.ps1
-```
+2. Install backend dependencies:
+   ```bash
+   cd backend
+   npm install
+   ```
 
-3. Configure environment variables
-```bash
-# Backend
-cd backend
-cp .env.example .env
-# Edit .env with your configurations
+3. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
 
-# Mobile
-cd ../mobile
-# Add your Firebase configuration files
-```
+4. Run database migrations:
+   ```bash
+   npm run migrate
+   ```
 
-## Architecture
+5. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-### Frontend (Mobile)
-- Framework: Flutter/Dart
-- State Management: BLoC pattern
-- Local Storage: Hive
-- API Client: Dio
-- Testing: Flutter Test
+### Available Scripts
 
-### Backend
-- Runtime: Node.js with Express
-- Database: PostgreSQL
-- Caching: Redis
-- Authentication: JWT
-- API Documentation: Swagger
+- `npm start`: Start production server
+- `npm run dev`: Start development server with hot reload
+- `npm test`: Run tests with coverage
+- `npm run lint`: Lint code
+- `npm run format`: Format code with Prettier
+- `npm run migrate`: Run database migrations
+- `npm run migrate:rollback`: Rollback last migration
+- `npm run seed`: Seed database with sample data
+- `npm run validate`: Run linting and tests
 
-## Testing
+## API Documentation
 
-```bash
-# Run backend tests
-cd backend
-npm test
+API documentation is available at `/api-docs` when running the server.
 
-# Run mobile tests
-cd mobile
-flutter test
-```
+### Key Endpoints
 
-## Deployment
+- `GET /health`: Health check endpoint
+- `POST /api/auth/register`: Register new user
+- `POST /api/auth/login`: Login user
+- `GET /api/lists`: Get user's grocery lists
+- `POST /api/lists`: Create new grocery list
+- `PUT /api/lists/:id`: Update grocery list
+- `DELETE /api/lists/:id`: Delete grocery list
 
-### Mobile App
-- CI/CD via GitHub Actions
-- Automated builds for Android and iOS
-- Distribution through Firebase App Distribution
+## Mobile App Setup
 
-### Backend
-- Automated deployment to Heroku
-- Database migrations
-- Environment-specific configurations
+See [mobile/README.md](mobile/README.md) for mobile app setup instructions.
 
 ## Contributing
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Team
-
-- Project Lead: [Axel Medjber](https://github.com/axelmedjber)
-
-## Support
-
-For support, email monsdj.be@gmail.com or create an issue in the repository.
-
-## Acknowledgments
-
-- City of Mons for their support
-- Local social grocery stores
-- All contributors and supporters
-
----
-Made with  in Mons, Belgium

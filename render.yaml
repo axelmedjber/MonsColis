@@ -1,0 +1,47 @@
+services:
+  - type: web
+    name: monscolis-backend
+    env: node
+    region: frankfurt
+    rootDir: backend
+    buildCommand: npm ci
+    startCommand: node src/index.js
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DB_SSL
+        value: "true"
+      - key: LOG_LEVEL
+        value: info
+      - key: DB_HOST
+        fromDatabase:
+          name: monscolis-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: monscolis-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: monscolis-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: monscolis-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: monscolis-db
+          property: password
+
+databases:
+  - name: monscolis-db
+    region: frankfurt
+    plan: free
+    ipAllowList: [] # allow all

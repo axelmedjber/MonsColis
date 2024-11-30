@@ -24,7 +24,11 @@ app.use('/api', routes);
 
 // Health check route (outside /api for easier monitoring)
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok' });
+  res.status(200).json({ 
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV
+  });
 });
 
 // 404 handler
@@ -36,8 +40,8 @@ app.use((req, res) => {
 app.use(errorHandler);
 
 // Start server
-const server = app.listen(port, () => {
-  logger.info(`Server running on port ${port}`);
+const server = app.listen(port, '0.0.0.0', () => {
+  logger.info(`Server running on port ${port} in ${process.env.NODE_ENV} mode`);
 });
 
 // Handle shutdown gracefully
@@ -49,4 +53,16 @@ process.on('SIGTERM', () => {
   });
 });
 
-module.exports = app; // Export for testing
+// Handle uncaught exceptions
+process.on('uncaughtException', (error) => {
+  logger.error('Uncaught Exception:', error);
+  process.exit(1);
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  process.exit(1);
+});
+
+module.exports = app;
