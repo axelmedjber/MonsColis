@@ -1,153 +1,98 @@
-# MonsColis Social Grocery Platform
-
-A comprehensive mobile application to streamline social grocery services in Mons, Belgium, connecting beneficiaries with local social grocery stores through an efficient, user-friendly platform.
-
-![MonsColis Logo](assets/logo.png)
+# MonsColis 
 
 ![CI/CD](https://github.com/axelmedjber/MonsColis/workflows/Flutter%20CI%2FCD/badge.svg)
 ![CI/CD](https://github.com/axelmedjber/MonsColis/workflows/Node.js%20CI%2FCD/badge.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[![Flutter CI/CD](https://github.com/yourusername/MonsColis/actions/workflows/flutter.yml/badge.svg)](https://github.com/yourusername/MonsColis/actions/workflows/flutter.yml)
-[![Node.js CI/CD](https://github.com/yourusername/MonsColis/actions/workflows/node.yml/badge.svg)](https://github.com/yourusername/MonsColis/actions/workflows/node.yml)
+## About MonsColis
 
-## Features
+MonsColis is a comprehensive mobile application designed to streamline social grocery services in Mons, Belgium. The platform connects beneficiaries with local social grocery stores through an efficient, user-friendly interface.
 
-- **Authentication**
-  - Phone number verification
-  - Role-based access control
-  - Secure credential management
+### Key Features
 
-- **Store Management**
-  - Store listings with real-time capacity
-  - Detailed store information
-  - Operating hours display
-  - Smart appointment scheduling
-
-- **Appointment System**
-  - Intuitive booking interface
-  - Real-time availability
-  - Appointment reminders
-  - Cancellation management
-
-- **Document Management**
-  - Secure document upload
-  - Status tracking
-  - Admin review system
-  - Document history
-
-- **User Profile**
-  - Multi-language support (EN, FR, NL)
-  - Customizable settings
-  - Dark mode
-  - Notification preferences
-
-- **Help & Support**
-  - Comprehensive FAQ
-  - Direct contact options
-  - Support ticket system
-  - User guides
-
-## Technical Stack
-
-### Mobile App (Flutter)
-- State Management: BLoC pattern
-- Local Storage: Hive
-- API Client: Dio
-- Testing: Flutter Test, Integration Tests
-- CI/CD: GitHub Actions
-
-### Backend (Node.js)
-- Framework: Express
-- Database: PostgreSQL
-- Caching: Redis
-- Authentication: JWT
-- Testing: Jest
-- CI/CD: GitHub Actions
+- Cross-platform mobile application (iOS & Android)
+- Secure authentication with phone verification
+- Real-time store capacity tracking
+- Smart appointment scheduling
+- Digital document management
+- Multi-language support (FR, EN, NL)
+- Dark mode support
+- Push notifications
 
 ## Getting Started
 
 ### Prerequisites
-- Flutter SDK (3.x)
-- Node.js (16.x or 18.x)
-- PostgreSQL (13+)
+
+- Flutter SDK (latest stable version)
+- Node.js (v16.x or later)
+- PostgreSQL (v13 or later)
 - Redis
-- Android Studio / Xcode
+- Git
 
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/MonsColis.git
-   cd MonsColis
-   ```
-
-2. **Backend Setup**
-   ```bash
-   cd backend
-   npm install
-   cp .env.example .env  # Configure your environment variables
-   npm run migrate
-   npm run dev
-   ```
-
-3. **Mobile App Setup**
-   ```bash
-   cd mobile
-   flutter pub get
-   flutter run
-   ```
-
-### Environment Variables
-
-#### Backend (.env)
-```
-NODE_ENV=development
-PORT=3000
-DATABASE_URL=postgresql://user:password@localhost:5432/monscolis
-REDIS_URL=redis://localhost:6379
-JWT_SECRET=your_jwt_secret
-SMS_API_KEY=your_sms_api_key
+1. Clone the repository
+```bash
+git clone https://github.com/axelmedjber/MonsColis.git
+cd MonsColis
 ```
 
-#### Mobile (lib/config/env.dart)
-```dart
-const API_BASE_URL = 'http://localhost:3000';
-const SMS_VERIFICATION_ENABLED = true;
+2. Set up the development environment
+```powershell
+.\scripts\setup.ps1
 ```
+
+3. Configure environment variables
+```bash
+# Backend
+cd backend
+cp .env.example .env
+# Edit .env with your configurations
+
+# Mobile
+cd ../mobile
+# Add your Firebase configuration files
+```
+
+## Architecture
+
+### Frontend (Mobile)
+- Framework: Flutter/Dart
+- State Management: BLoC pattern
+- Local Storage: Hive
+- API Client: Dio
+- Testing: Flutter Test
+
+### Backend
+- Runtime: Node.js with Express
+- Database: PostgreSQL
+- Caching: Redis
+- Authentication: JWT
+- API Documentation: Swagger
 
 ## Testing
 
-### Running Backend Tests
 ```bash
+# Run backend tests
 cd backend
-npm test                 # Run unit tests
-npm run test:coverage    # Generate coverage report
-```
+npm test
 
-### Running Mobile Tests
-```bash
+# Run mobile tests
 cd mobile
-flutter test                    # Run unit tests
-flutter test integration_test   # Run integration tests
+flutter test
 ```
 
 ## Deployment
 
-### Backend Deployment (Heroku)
-1. Create a new Heroku app
-2. Configure environment variables
-3. Push to Heroku:
-   ```bash
-   git subtree push --prefix backend heroku main
-   ```
+### Mobile App
+- CI/CD via GitHub Actions
+- Automated builds for Android and iOS
+- Distribution through Firebase App Distribution
 
-### Mobile App Distribution (Firebase)
-1. Configure Firebase App Distribution
-2. Push to main branch
-3. GitHub Actions will automatically:
-   - Build the APK
-   - Deploy to Firebase
-   - Distribute to testers
+### Backend
+- Automated deployment to Heroku
+- Database migrations
+- Environment-specific configurations
 
 ## Contributing
 
@@ -163,11 +108,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Team
 
-- Project Lead: [Your Name](https://github.com/yourusername)
-- Backend Developer: [Name](https://github.com/username)
-- Mobile Developer: [Name](https://github.com/username)
-- UI/UX Designer: [Name](https://github.com/username)
+- Project Lead: [Axel Medjber](https://github.com/axelmedjber)
 
 ## Support
 
-For support, email support@monscolis.be or join our Slack channel.
+For support, email monsdj.be@gmail.com or create an issue in the repository.
+
+## Acknowledgments
+
+- City of Mons for their support
+- Local social grocery stores
+- All contributors and supporters
+
+---
+Made with  in Mons, Belgium

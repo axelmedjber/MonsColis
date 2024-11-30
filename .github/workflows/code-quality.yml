@@ -1,0 +1,60 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+        cache: 'npm'
+        cache-dependency-path: './backend/package-lock.json'
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.x'
+        channel: 'stable'
+        cache: true
+
+    - name: Install dependencies (Backend)
+      working-directory: ./backend
+      run: npm ci
+
+    - name: Run ESLint
+      working-directory: ./backend
+      run: npm run lint
+
+    - name: Install dependencies (Mobile)
+      working-directory: ./mobile
+      run: flutter pub get
+
+    - name: Analyze Flutter code
+      working-directory: ./mobile
+      run: flutter analyze
+
+    - name: Check Flutter formatting
+      working-directory: ./mobile
+      run: dart format --set-exit-if-changed .
+
+    - name: Run Flutter tests with coverage
+      working-directory: ./mobile
+      run: flutter test --coverage
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./mobile/coverage/lcov.info,./backend/coverage/lcov.info
+        flags: unittests
+        name: codecov-umbrella
