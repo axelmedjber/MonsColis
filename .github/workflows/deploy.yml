@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
     environment:
-      name: staging
+      name: Monscolis Staging Environment
       url: https://monscolis-staging.herokuapp.com
     
     steps:
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     environment:
-      name: production
+      name: Monscolis Production Environment
       url: https://monscolis-prod.herokuapp.com
     needs: [deploy-staging]
     
@@ -55,7 +55,7 @@ jobs:
         uses: akhileshns/heroku-deploy@v3.12.14
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+          heroku_app_name: monscolis-prod
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
           appdir: "backend"
         env:
@@ -66,7 +66,7 @@ jobs:
         env:
           API_BASE_URL: https://monscolis-prod.herokuapp.com
         run: |
-          flutter build apk --release --dart-define=ENVIRONMENT=production
+          flutter build apk --dart-define=ENVIRONMENT=production
           
       - name: Upload to Firebase App Distribution (Production)
         uses: wzieba/Firebase-Distribution-Github-Action@v1
