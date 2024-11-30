@@ -22,8 +22,12 @@ jobs:
           heroku_app_name: monscolis-staging
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
           appdir: "backend"
+          env_file: "./backend/.env.example"
         env:
-          NODE_ENV: staging
+          HD_NODE_ENV: staging
+          HD_JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          HD_DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
+          HD_REDIS_URL: ${{ secrets.STAGING_REDIS_URL }}
 
       - name: Build and Deploy Mobile App (Staging)
         working-directory: ./mobile
@@ -58,8 +62,12 @@ jobs:
           heroku_app_name: monscolis-prod
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
           appdir: "backend"
+          env_file: "./backend/.env.example"
         env:
-          NODE_ENV: production
+          HD_NODE_ENV: production
+          HD_JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          HD_DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+          HD_REDIS_URL: ${{ secrets.PRODUCTION_REDIS_URL }}
 
       - name: Build and Deploy Mobile App (Production)
         working-directory: ./mobile
