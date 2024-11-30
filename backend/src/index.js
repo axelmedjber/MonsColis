@@ -23,7 +23,7 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(require('./swagger')));
 app.use('/api', routes);
 
 // Health check route (outside /api for easier monitoring)
-app.get('/health', (req, res) => {
+app.get('/healthz', (req, res) => {
   res.status(200).json({ 
     status: 'ok',
     timestamp: new Date().toISOString(),

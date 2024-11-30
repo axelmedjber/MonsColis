@@ -2,12 +2,12 @@ services:
   - type: web
     name: monscolis-backend
     env: node
-    region: frankfurt
-    branch: develop
+    region: oregon
+    branch: master
     rootDir: backend
-    buildCommand: npm ci
-    startCommand: node src/index.js
-    healthCheckPath: /health
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    healthCheckPath: /healthz
     autoDeploy: true
     plan: free
     envVars:
@@ -44,6 +44,6 @@ services:
 
 databases:
   - name: monscolis-db
-    region: frankfurt
+    region: oregon
     plan: free
     ipAllowList: [] # allow all
