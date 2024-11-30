@@ -1,0 +1,59 @@
+name: SonarCloud Analysis
+
+on:
+  push:
+    branches: [ master, develop ]
+  pull_request:
+    branches: [ master, develop ]
+
+jobs:
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+          channel: 'stable'
+
+      - name: Install dependencies (Backend)
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Run backend tests with coverage
+        working-directory: ./backend
+        run: npm run test:coverage
+
+      - name: Install dependencies (Mobile)
+        working-directory: ./mobile
+        run: flutter pub get
+
+      - name: Run Flutter tests with coverage
+        working-directory: ./mobile
+        run: flutter test --coverage
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=axelmedjber
+            -Dsonar.projectKey=axelmedjber_MonsColis
+            -Dsonar.sources=backend/src,mobile/lib
+            -Dsonar.tests=backend/test,mobile/test
+            -Dsonar.javascript.lcov.reportPaths=backend/coverage/lcov.info
+            -Dsonar.flutter.coverage.reportPath=mobile/coverage/lcov.info
+            -Dsonar.sourceEncoding=UTF-8

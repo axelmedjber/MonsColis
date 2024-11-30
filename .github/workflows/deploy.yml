@@ -1,0 +1,73 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ master, develop ]
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    environment: staging
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy to Staging
+        uses: akhileshns/heroku-deploy@v3.12.14
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: monscolis-staging
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          appdir: "backend"
+        env:
+          NODE_ENV: staging
+
+      - name: Build and Deploy Mobile App (Staging)
+        working-directory: ./mobile
+        env:
+          API_BASE_URL: https://monscolis-staging.herokuapp.com
+        run: |
+          flutter build apk --dart-define=ENVIRONMENT=staging
+          
+      - name: Upload to Firebase App Distribution (Staging)
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID }}
+          serviceCredentialsFile: ${{ secrets.FIREBASE_SERVICE_CREDENTIALS }}
+          groups: testers
+          file: mobile/build/app/outputs/flutter-apk/app-release.apk
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    environment: production
+    needs: [deploy-staging]
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy to Production
+        uses: akhileshns/heroku-deploy@v3.12.14
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          appdir: "backend"
+        env:
+          NODE_ENV: production
+
+      - name: Build and Deploy Mobile App (Production)
+        working-directory: ./mobile
+        env:
+          API_BASE_URL: https://monscolis-prod.herokuapp.com
+        run: |
+          flutter build apk --release --dart-define=ENVIRONMENT=production
+          
+      - name: Upload to Firebase App Distribution (Production)
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID }}
+          serviceCredentialsFile: ${{ secrets.FIREBASE_SERVICE_CREDENTIALS }}
+          groups: production
+          file: mobile/build/app/outputs/flutter-apk/app-release.apk
