@@ -2,6 +2,7 @@
 
 ![CI/CD](https://github.com/axelmedjber/MonsColis/workflows/Flutter%20CI%2FCD/badge.svg)
 ![CI/CD](https://github.com/axelmedjber/MonsColis/workflows/Node.js%20CI%2FCD/badge.svg)
+![Deploy](https://github.com/axelmedjber/MonsColis/workflows/Deploy/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## About MonsColis
