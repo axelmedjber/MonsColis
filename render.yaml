@@ -4,8 +4,10 @@ services:
     env: node
     region: frankfurt
     rootDir: backend
-    buildCommand: npm ci
-    startCommand: node src/index.js
+    buildCommand: |
+      npm ci
+      npm run build
+    startCommand: npm start
     healthCheckPath: /health
     autoDeploy: true
     envVars:

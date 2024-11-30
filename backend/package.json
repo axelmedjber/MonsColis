@@ -4,7 +4,8 @@
   "description": "Backend server for MonsColis social grocery management system",
   "main": "src/index.js",
   "scripts": {
-    "start": "npm run migrate && node src/index.js",
+    "start": "node src/index.js",
+    "build": "npm install",
     "dev": "nodemon src/index.js",
     "test": "jest --coverage",
     "lint": "eslint src/**/*.js",
@@ -67,6 +68,6 @@
     ]
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": "18.x"
   }
 }
