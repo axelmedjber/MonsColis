@@ -4,6 +4,9 @@ A comprehensive mobile application to streamline social grocery services in Mons
 
 ![MonsColis Logo](assets/logo.png)
 
+![CI/CD](https://github.com/axelmedjber/MonsColis/workflows/Flutter%20CI%2FCD/badge.svg)
+![CI/CD](https://github.com/axelmedjber/MonsColis/workflows/Node.js%20CI%2FCD/badge.svg)
+
 [![Flutter CI/CD](https://github.com/yourusername/MonsColis/actions/workflows/flutter.yml/badge.svg)](https://github.com/yourusername/MonsColis/actions/workflows/flutter.yml)
 [![Node.js CI/CD](https://github.com/yourusername/MonsColis/actions/workflows/node.yml/badge.svg)](https://github.com/yourusername/MonsColis/actions/workflows/node.yml)
 
