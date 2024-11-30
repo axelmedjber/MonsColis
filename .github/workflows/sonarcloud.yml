@@ -2,15 +2,16 @@ name: SonarCloud Analysis
 
 on:
   push:
-    branches: [ master, develop ]
+    branches: [ main, develop ]
   pull_request:
-    branches: [ master, develop ]
+    branches: [ main, develop ]
 
 jobs:
-  sonarcloud:
-    name: SonarCloud
+  analyze:
+    name: Analyze
     runs-on: ubuntu-latest
-    
+    environment: ${{ github.ref == 'refs/heads/main' && 'Monscolis Production Environment' || 'Monscolis Staging Environment' }}
+
     steps:
       - uses: actions/checkout@v3
         with:
@@ -19,8 +20,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: '18'
           cache: 'npm'
+          cache-dependency-path: './backend/package-lock.json'
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -29,27 +31,24 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Install dependencies (Backend)
+      - name: Install Backend Dependencies
         working-directory: ./backend
         run: npm ci
 
-      - name: Run backend tests with coverage
+      - name: Run Backend Tests with Coverage
         working-directory: ./backend
-        run: |
-          npm install --save-dev jest
-          npx jest --coverage
+        run: npm run test:coverage
 
-      - name: Install dependencies (Mobile)
+      - name: Install Flutter Dependencies
         working-directory: ./mobile
         run: flutter pub get
 
-      - name: Run Flutter tests with coverage
+      - name: Run Flutter Tests with Coverage
         working-directory: ./mobile
         run: flutter test --coverage
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
-        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -62,11 +61,5 @@ jobs:
             -Dsonar.javascript.lcov.reportPaths=backend/coverage/lcov.info
             -Dsonar.flutter.coverage.reportPath=mobile/coverage/lcov.info
             -Dsonar.sourceEncoding=UTF-8
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          token: 8f3659f5-9c03-4839-a840-d98c35287ba2
-          files: ./backend/coverage/lcov.info,./mobile/coverage/lcov.info
-          flags: unittests
-          name: codecov-umbrella
+            -Dsonar.coverage.exclusions=**/*.test.js,**/*.spec.js,**/*.test.dart,**/*.g.dart
+            -Dsonar.cpd.exclusions=**/*.g.dart

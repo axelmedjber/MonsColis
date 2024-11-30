@@ -22,10 +22,31 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(require('./swagger')));
 // Routes
 app.use('/api', routes);
 
+// Health check route (outside /api for easier monitoring)
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ error: 'Not Found' });
+});
+
 // Error handling
 app.use(errorHandler);
 
 // Start server
-app.listen(port, () => {
+const server = app.listen(port, () => {
   logger.info(`Server running on port ${port}`);
 });
+
+// Handle shutdown gracefully
+process.on('SIGTERM', () => {
+  logger.info('SIGTERM signal received: closing HTTP server');
+  server.close(() => {
+    logger.info('HTTP server closed');
+    process.exit(0);
+  });
+});
+
+module.exports = app; // Export for testing
