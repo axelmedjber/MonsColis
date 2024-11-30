@@ -59,8 +59,11 @@ jobs:
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
+      if: ${{ env.CODECOV_TOKEN != '' }}
       with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+        token: ${{ env.CODECOV_TOKEN }}
         files: ./mobile/coverage/lcov.info,./backend/coverage/lcov.info
         flags: unittests
         name: codecov-umbrella
+      env:
+        CODECOV_TOKEN: 8f3659f5-9c03-4839-a840-d98c35287ba2
